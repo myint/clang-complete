@@ -1862,7 +1862,7 @@ class CodeCompletionResults(ClangObject):
                 self.ccr= ccr
 
             def __len__(self):
-                return int(\
+                return int(
                   conf.lib.clang_codeCompleteGetNumDiagnostics(self.ccr))
 
             def __getitem__(self, key):
@@ -3095,7 +3095,7 @@ class Config:
     def set_library_path(path):
         """Set the path in which to search for libclang"""
         if Config.loaded:
-            raise Exception("library path must be set before before using " \
+            raise Exception("library path must be set before before using "
                             "any other functionalities in libclang.")
 
         Config.library_path = path
@@ -3104,7 +3104,7 @@ class Config:
     def set_library_file(filename):
         """Set the exact location of libclang"""
         if Config.loaded:
-            raise Exception("library file must be set before before using " \
+            raise Exception("library file must be set before before using "
                             "any other functionalities in libclang.")
 
         Config.library_file = filename
@@ -3128,7 +3128,7 @@ class Config:
         libclang versions.
         """
         if Config.loaded:
-            raise Exception("compatibility_check must be set before before " \
+            raise Exception("compatibility_check must be set before before "
                             "using any other functionalities in libclang.")
 
         Config.compatibility_check = check_status
