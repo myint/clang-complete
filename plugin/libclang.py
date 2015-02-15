@@ -313,7 +313,7 @@ def getCompilationDBParams(fileName):
       getCompilationDBParams.last_query = { 'args': args, 'cwd': cwd }
 
   # Do not directly return last_query, but make sure we return a deep copy.
-  # Otherwise users of that result may accidently change it and store invalid
+  # Otherwise users of that result may accidentally change it and store invalid
   # values in our cache.
   query = getCompilationDBParams.last_query
   return { 'args': list(query['args']), 'cwd': query['cwd']}
@@ -715,7 +715,7 @@ kinds = dict({                                                                 \
 201 : '201',  # CXCursor_LabelStmt (A labelled statement in a function)        \
 202 : '202',  # CXCursor_CompoundStmt (A group of statements like              \
               # { stmt stmt }.                                                 \
-203 : '203',  # CXCursor_CaseStmt (A case statment)                            \
+203 : '203',  # CXCursor_CaseStmt (A case statement)                            \
 204 : '204',  # CXCursor_DefaultStmt (A default statement)                     \
 205 : '205',  # CXCursor_IfStmt (An if statemen)                               \
 206 : '206',  # CXCursor_SwitchStmt (A switch statement)                       \

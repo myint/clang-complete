@@ -332,7 +332,7 @@ If you have ultisnips installed, you can use
 let g:clang_snippets = 1
 let g:clang_snippets_engine = 'ultisnips'
 
-instead. After a completetion you can use <Tab> in normal mode to jump to the
+instead. After a completion you can use <Tab> in normal mode to jump to the
 next parameter.
 
 *) Can I configure clang_complete to insert the text automatically when there

@@ -2343,7 +2343,7 @@ class CompilationDatabaseError(Exception):
     constants in this class.
     """
 
-    # An unknown error occured
+    # An unknown error occurred
     ERROR_UNKNOWN = 0
 
     # The database could not be loaded
