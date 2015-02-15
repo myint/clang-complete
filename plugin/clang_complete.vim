@@ -163,7 +163,7 @@ function! s:ClangCompleteInit()
     return
   endif
 
-  python snippetsInit()
+  python3 snippetsInit()
 
   if g:clang_make_default_keymappings == 1
     inoremap <expr> <buffer> <C-X><C-U> <SID>LaunchCompletion()
@@ -254,7 +254,7 @@ function! s:processFilename(filename, root)
   if matchstr(a:filename, '\C^[''"\\]\=/') != ''
     let l:filename = a:filename
   " Handle Windows absolute path
-  elseif s:isWindows() 
+  elseif s:isWindows()
        \ && matchstr(a:filename, '\C^"\=[a-zA-Z]:[/\\]') != ''
     let l:filename = a:filename
   " Convert relative path to absolute path
@@ -274,7 +274,7 @@ function! s:processFilename(filename, root)
       let l:filename = shellescape(a:root) . a:filename
     endif
   endif
-  
+
   return l:filename
 endfunction
 
@@ -335,7 +335,7 @@ function! s:parsePathOption()
 endfunction
 
 function! s:initClangCompletePython()
-  if !has('python')
+  if !has('python3')
     echoe 'clang_complete: No python support available.'
     echoe 'Cannot use clang library'
     echoe 'Compile vim with python support to use libclang'
@@ -344,13 +344,13 @@ function! s:initClangCompletePython()
 
   " Only parse the python library once
   if !exists('s:libclang_loaded')
-    python import sys
+    python3 import sys
 
-    exe 'python sys.path = ["' . s:plugin_path . '"] + sys.path'
-    exe 'pyfile ' . fnameescape(s:plugin_path) . '/libclang.py'
+    exe 'python3 sys.path = ["' . s:plugin_path . '"] + sys.path'
+    exe 'py3file ' . fnameescape(s:plugin_path) . '/libclang.py'
 
     try
-      exe 'python from snippets.' . g:clang_snippets_engine . ' import *'
+      exe 'python3 from snippets.' . g:clang_snippets_engine . ' import *'
       let l:snips_loaded = 1
     catch
       let l:snips_loaded = 0
@@ -363,13 +363,13 @@ function! s:initClangCompletePython()
       return 0
     endif
 
-    py vim.command('let l:res = ' + str(initClangComplete(vim.eval('g:clang_complete_lib_flags'), vim.eval('g:clang_compilation_database'), vim.eval('g:clang_library_path'))))
+    python3 vim.command('let l:res = ' + str(initClangComplete(vim.eval('g:clang_complete_lib_flags'), vim.eval('g:clang_compilation_database'), vim.eval('g:clang_library_path'))))
     if l:res == 0
       return 0
     endif
     let s:libclang_loaded = 1
   endif
-  python WarmupCache()
+  python3 WarmupCache()
   return 1
 endfunction
 
@@ -380,7 +380,7 @@ function! s:DoPeriodicQuickFix()
   endif
   let b:my_changedtick = b:changedtick
 
-  python updateCurrentDiagnostics()
+  python3 updateCurrentDiagnostics()
   call s:ClangQuickFix()
 endfunction
 
@@ -389,8 +389,8 @@ function! s:ClangQuickFix()
   syntax clear SpellBad
   syntax clear SpellLocal
 
-  python vim.command('let l:list = ' + str(getCurrentQuickFixList()))
-  python highlightCurrentDiagnostics()
+  python3 vim.command('let l:list = ' + str(getCurrentQuickFixList()))
+  python3 highlightCurrentDiagnostics()
 
   if g:clang_complete_copen == 1
     " We should get back to the original buffer
@@ -442,11 +442,11 @@ function! ClangComplete(findstart, base)
       let l:time_start = reltime()
     endif
 
-    python snippetsReset()
+    python3 snippetsReset()
 
-    python completions, timer = getCurrentCompletions(vim.eval('a:base'))
-    python vim.command('let l:res = ' + completions)
-    python timer.registerEvent("Load into vimscript")
+    python3 completions, timer = getCurrentCompletions(vim.eval('a:base'))
+    python3 vim.command('let l:res = ' + completions)
+    python3 timer.registerEvent("Load into vimscript")
 
     if g:clang_make_default_keymappings == 1
       if s:use_maparg
@@ -467,7 +467,7 @@ function! ClangComplete(findstart, base)
     augroup end
     let b:snippet_chosen = 0
 
-    python timer.finish()
+    python3 timer.finish()
 
     if g:clang_debug == 1
       echom 'clang_complete: completion time ' . split(reltimestr(reltime(l:time_start)))[0]
@@ -538,7 +538,7 @@ function! s:TriggerSnippet()
   call s:StopMonitoring()
 
   " Trigger the snippet
-  python snippetsTrigger()
+  python3 snippetsTrigger()
 
   if g:clang_close_preview
     pclose
@@ -599,7 +599,7 @@ endfunction
 
 function! s:GotoDeclaration(preview)
   try
-    python gotoDeclaration(vim.eval('a:preview') == '1')
+    python3 gotoDeclaration(vim.eval('a:preview') == '1')
   catch /^Vim\%((\a\+)\)\=:E37/
     echoe "The current file is not saved, and 'hidden' is not set."
           \ "Either save the file or add 'set hidden' in your vimrc."

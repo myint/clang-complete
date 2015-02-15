@@ -9,7 +9,7 @@ $ vim clang_complete.vmb -c 'so %' -c 'q'
 
 Alternatively, you can also put the files in ~/.vim/
 
-You need Vim 7.3 or higher, compiled with python support and ideally, with
+You need Vim 7.3 or higher, compiled with "python3" support and ideally, with
 the conceal feature.
 
 See doc/clang_complete.txt for help and license.
