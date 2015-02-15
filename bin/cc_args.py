@@ -44,7 +44,7 @@ def parseArguments(arguments):
     elif nextIsIncludeFile:
       include_file += [arg]
       nextIsIncludeFile = False
-    elif arg == "-I":
+    elif arg in ('-I', '-isystem'):
       nextIsInclude = True
     elif arg == "-D":
       nextIsDefine = True
