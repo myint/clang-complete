@@ -104,6 +104,10 @@ function! s:ClangCompleteInit()
     let g:clang_debug = 0
   endif
 
+  if !exists('g:clang_quiet')
+    let g:clang_quiet = 0
+  endif
+
   if !exists('g:clang_sort_algo')
     let g:clang_sort_algo = 'priority'
   endif
@@ -340,9 +344,11 @@ endfunction
 
 function! s:initClangCompletePython()
   if !has('python3')
-    echoe 'clang_complete: No python support available.'
-    echoe 'Cannot use clang library'
-    echoe 'Compile vim with python support to use libclang'
+    if !g:clang_quiet
+      echoe 'clang_complete: No python support available.'
+      echoe 'Cannot use clang library'
+      echoe 'Compile vim with python support to use libclang'
+    endif
     return 0
   endif
 

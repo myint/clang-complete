@@ -60,6 +60,7 @@ def initClangComplete(clang_complete_flags, clang_compilation_database,
   global index
 
   debug = int(vim.eval("g:clang_debug")) == 1
+  quiet = int(vim.eval("g:clang_quiet")) == 1
 
   if library_path:
     if os.path.isdir(library_path):
@@ -72,6 +73,8 @@ def initClangComplete(clang_complete_flags, clang_compilation_database,
   try:
     index = Index.create()
   except Exception as e:
+    if quiet:
+      return 0
     if library_path:
       suggestion = "Are you sure '%s' contains libclang?" % library_path
     else:
