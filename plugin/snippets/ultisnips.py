@@ -1,5 +1,4 @@
 import vim
-import re
 
 try:
   from UltiSnips import UltiSnips_Manager
