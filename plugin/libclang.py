@@ -1,9 +1,32 @@
-from clang.cindex import *
-import vim
+from __future__ import print_function
+
 import time
 import threading
 import os
 import shlex
+
+from clang.cindex import (
+  CompilationDatabase,
+  Config,
+  Cursor,
+  File,
+  Index,
+  SourceLocation,
+  TranslationUnit,
+  TranslationUnitLoadError
+)
+import vim
+
+
+builtinHeaderPath = None
+compilation_database = None
+complete_flags = None
+index = None
+libclangLock = None
+snippetsAddSnippet = None
+snippetsFormatPlaceHolder = None
+translationUnits = None
+
 
 # Check if libclang is able to find the builtin include files.
 #
