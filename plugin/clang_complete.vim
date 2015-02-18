@@ -343,7 +343,7 @@ function! s:parsePathOption()
 endfunction
 
 function! s:initClangCompletePython()
-  if !has('python3')
+  if !has('python3') && !has('python')
     if !g:clang_quiet
       echoe 'clang_complete: No python support available.'
       echoe 'Cannot use clang library'
@@ -368,15 +368,17 @@ function! s:initClangCompletePython()
     if l:snips_loaded == 0
       " Oh yeah, vimscript rocks!
       " Putting that echoe inside the catch, will throw an error, and
-      " display spurious unwanted errors…
+      " display spurious unwanted errors.
       echoe 'Snippets engine ' . g:clang_snippets_engine . ' not found'
       return 0
     endif
 
     python3 vim.command('let l:res = ' + str(initClangComplete(vim.eval('g:clang_complete_lib_flags'), vim.eval('g:clang_compilation_database'), vim.eval('g:clang_library_path'))))
+    " @vimlint(EVL101, 1, l:res)
     if l:res == 0
       return 0
     endif
+    " @vimlint(EVL101, 0, l:res)
     let s:libclang_loaded = 1
   endif
   python3 WarmupCache()
@@ -402,6 +404,7 @@ function! s:ClangQuickFix()
   python3 vim.command('let l:list = ' + str(getCurrentQuickFixList()))
   python3 highlightCurrentDiagnostics()
 
+  " @vimlint(EVL101, 1, l:list)
   if g:clang_complete_copen == 1
     " We should get back to the original buffer
     let l:bufnr = bufnr('%')
@@ -418,6 +421,7 @@ function! s:ClangQuickFix()
     exe l:winbufnr . 'wincmd w'
   endif
   call setqflist(l:list)
+  " @vimlint(EVL101, 0, l:list)
   silent doautocmd QuickFixCmdPost make
 endfunction
 
@@ -432,6 +436,7 @@ endfunction
 
 let b:col = 0
 
+" @vimlint(EVL103, 1, a:base)
 function! ClangComplete(findstart, base)
   if a:findstart
     let l:line = getline('.')
@@ -458,6 +463,7 @@ function! ClangComplete(findstart, base)
     python3 vim.command('let l:res = ' + completions)
     python3 timer.registerEvent("Load into vimscript")
 
+    " @vimlint(EVL101, 1, l:res)
     if g:clang_make_default_keymappings == 1
       if s:use_maparg
         let s:old_cr = maparg('<CR>', 'i', 0, 1)
@@ -480,11 +486,15 @@ function! ClangComplete(findstart, base)
     python3 timer.finish()
 
     if g:clang_debug == 1
+      " @vimlint(EVL104, 1, l:time_start)
       echom 'clang_complete: completion time ' . split(reltimestr(reltime(l:time_start)))[0]
+      " @vimlint(EVL104, 0, l:time_start)
     endif
     return l:res
+    " @vimlint(EVL101, 0, l:res)
   endif
 endfunction
+" @vimlint(EVL103, 0, a:base)
 
 function! s:HandlePossibleSelectionEnter()
   if pumvisible()
@@ -607,6 +617,7 @@ function! s:CompleteColon()
   return ':' . s:LaunchCompletion()
 endfunction
 
+" @vimlint(EVL103, 1, a:preview)
 function! s:GotoDeclaration(preview)
   try
     python3 gotoDeclaration(vim.eval('a:preview') == '1')
@@ -616,6 +627,7 @@ function! s:GotoDeclaration(preview)
   endtry
   return ''
 endfunction
+" @vimlint(EVL103, 0, a:preview)
 
 " May be used in a mapping to update the quickfix window.
 function! g:ClangUpdateQuickFix()
