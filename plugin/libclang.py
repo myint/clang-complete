@@ -4,6 +4,7 @@ import time
 import threading
 import os
 import shlex
+import sys
 
 from clang.cindex import (
   CompilationDatabase,
@@ -26,6 +27,13 @@ libclangLock = None
 snippetsAddSnippet = None
 snippetsFormatPlaceHolder = None
 translationUnits = None
+
+
+def decode(value):
+  if sys.version_info[0] == 2:
+    return value
+  else:
+    return value.decode('utf-8')
 
 
 # Check if libclang is able to find the builtin include files.
@@ -403,7 +411,7 @@ def formatResult(result):
 
     chunk_spelling = chunk.spelling
     try:
-      chunk_spelling = chunk_spelling.decode('utf-8')
+      chunk_spelling = decode(chunk_spelling)
     except AttributeError:
       pass
 
@@ -420,7 +428,7 @@ def formatResult(result):
   menu = info
 
   if returnValue:
-    menu = returnValue.spelling.decode('utf-8') + " " + menu
+    menu = decode(returnValue.spelling) + " " + menu
 
   completion['word'] = snippetsAddSnippet(info, word, abbr)
   completion['abbr'] = abbr

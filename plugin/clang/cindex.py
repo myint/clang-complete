@@ -68,6 +68,7 @@ from ctypes import (
     byref, cast, cdll, py_object
 )
 import collections
+import sys
 
 import clang.enumerations
 
@@ -78,6 +79,14 @@ import clang.enumerations
 c_object_p = POINTER(c_void_p)
 
 callbacks = {}
+
+
+def encode(value):
+  if sys.version_info[0] == 2:
+    return value
+  else:
+    return value.encode('utf-8')
+
 
 ### Exception Classes ###
 
@@ -2001,7 +2010,7 @@ class TranslationUnit(ClangObject):
 
         args_array = None
         if len(args) > 0:
-            args_array = (c_char_p * len(args))(* [argument.encode('utf-8')
+            args_array = (c_char_p * len(args))(* [encode(argument)
                                                    for argument in args])
 
         unsaved_array = None
@@ -2011,11 +2020,11 @@ class TranslationUnit(ClangObject):
                 if hasattr(contents, "read"):
                     contents = contents.read()
 
-                unsaved_array[i].name = name.encode('utf-8')
-                unsaved_array[i].contents = contents.encode('utf-8')
+                unsaved_array[i].name = encode(name)
+                unsaved_array[i].contents = encode(contents)
                 unsaved_array[i].length = len(contents)
 
-        ptr = conf.lib.clang_parseTranslationUnit(index, filename.encode('utf-8'), args_array,
+        ptr = conf.lib.clang_parseTranslationUnit(index, encode(filename), args_array,
                                     len(args), unsaved_array,
                                     len(unsaved_files), options)
 
@@ -2193,8 +2202,8 @@ class TranslationUnit(ClangObject):
                     print(value)
                 if not isinstance(value, str):
                     raise TypeError('Unexpected unsaved file contents.')
-                unsaved_files_array[i].name = name.encode('utf-8')
-                unsaved_files_array[i].contents = value.encode('utf-8')
+                unsaved_files_array[i].name = encode(name)
+                unsaved_files_array[i].contents = encode(value)
                 unsaved_files_array[i].length = len(value)
         conf.lib.clang_reparseTranslationUnit(self, len(unsaved_files),
                 unsaved_files_array, options)
@@ -2257,10 +2266,10 @@ class TranslationUnit(ClangObject):
                     print(value)
                 if not isinstance(value, str):
                     raise TypeError('Unexpected unsaved file contents.')
-                unsaved_files_array[i].name = name.encode('utf-8')
-                unsaved_files_array[i].contents = value.encode('utf-8')
+                unsaved_files_array[i].name = encode(name)
+                unsaved_files_array[i].contents = encode(value)
                 unsaved_files_array[i].length = len(value)
-        ptr = conf.lib.clang_codeCompleteAt(self, path.encode('utf-8'), line, column,
+        ptr = conf.lib.clang_codeCompleteAt(self, encode(path), line, column,
                 unsaved_files_array, len(unsaved_files), options)
         if ptr:
             return CodeCompletionResults(ptr)
