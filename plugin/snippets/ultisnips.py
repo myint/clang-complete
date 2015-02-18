@@ -10,6 +10,10 @@ except:
       vim.eval('g:UltiSnipsJumpForwardTrigger'),
       vim.eval('g:UltiSnipsJumpBackwardTrigger'))
 
+
+ultisnips_idx = 0
+
+
 def snippetsInit():
   global ultisnips_idx
   ultisnips_idx = 0
