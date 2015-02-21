@@ -370,7 +370,7 @@ function! s:initClangCompletePython()
 
   " Only parse the python library once
   if !exists('s:libclang_loaded')
-    execute s:get_python() . "import sys"
+    execute s:get_python() . "import sys, vim"
 
     execute s:get_python() .
           \ "vim.command('let l:less_than_python_2_6 = %d' % (sys.version_info < (2, 6),))"
