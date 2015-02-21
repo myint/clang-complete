@@ -377,6 +377,9 @@ function! s:initClangCompletePython()
 
     " @vimlint(EVL101, 1, l:less_than_python_2_6)
     if l:less_than_python_2_6
+      if !g:clang_quiet
+        echoe 'clang_complete: Python is too old'
+      endif
       return 0
     endif
     " @vimlint(EVL101, 0, l:less_than_python_2_6)
