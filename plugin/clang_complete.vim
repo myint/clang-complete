@@ -372,6 +372,15 @@ function! s:initClangCompletePython()
   if !exists('s:libclang_loaded')
     execute s:get_python() . "import sys"
 
+    execute s:get_python() .
+          \ "vim.command('let l:less_than_python_2_6 = %d' % (sys.version_info < (2, 6),))"
+
+    " @vimlint(EVL101, 1, l:less_than_python_2_6)
+    if l:less_than_python_2_6
+      return 0
+    endif
+    " @vimlint(EVL101, 0, l:less_than_python_2_6)
+
     execute s:get_python() . 'sys.path = ["' . s:plugin_path . '"] + sys.path'
     execute s:get_pyfile() . fnameescape(s:plugin_path) . '/libclang.py'
 
